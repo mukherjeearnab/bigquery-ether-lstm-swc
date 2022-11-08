@@ -1,4 +1,4 @@
 *.csv
 *.pickle
 *.txt
-*.py
+__pycache__
