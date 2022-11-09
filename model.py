@@ -2,6 +2,9 @@ import torch  # pytorch
 import torch.nn as nn
 from torch.autograd import Variable
 
+device = torch.device("cuda:7" if torch.cuda.is_available() else "cpu")
+print(device)
+
 
 class LSTMNet(nn.Module):
     def __init__(self, num_classes: int, input_size: int, hidden_size: int, num_layers: int, seq_length: int):
@@ -54,6 +57,8 @@ class LSTM():
         self.model = LSTMNet(num_classes, input_size,
                              hidden_size, num_layers, seq_length)
 
+        self.model.to(device)
+
     def compile(self, learning_rate: float):
         self.criterion = torch.nn.BCELoss()    # mean-squared error for regression
         self.optimizer = torch.optim.Adam(
@@ -61,6 +66,9 @@ class LSTM():
 
     def fit(self, num_epochs: int, X: torch.Tensor, y: torch.Tensor,
             batch_size: int, X_validation: torch.Tensor, y_validation: torch.Tensor):
+
+        X.to(device)
+        y.to(device)
 
         # # Divide into batches
         # X_batches = torch.split(X, batch_size)
