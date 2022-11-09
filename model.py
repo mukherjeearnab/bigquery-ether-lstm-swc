@@ -20,6 +20,7 @@ class LSTMNet(nn.Module):
         self.fc = nn.Linear(128, num_classes)  # fully connected last layer
 
         self.relu = nn.ReLU()
+        self.sigmoid = nn.Sigmoid()
 
     def forward(self, x: torch.Tensor):
 
@@ -44,6 +45,7 @@ class LSTMNet(nn.Module):
 
         out = self.relu(out)  # relu
         out = self.fc(out)  # Final Output
+        out = self.sigmoid(out)
         return out
 
 
@@ -53,7 +55,7 @@ class LSTM():
                              hidden_size, num_layers, seq_length)
 
     def compile(self, learning_rate: float):
-        self.criterion = torch.nn.MSELoss()    # mean-squared error for regression
+        self.criterion = torch.nn.BCELoss()    # mean-squared error for regression
         self.optimizer = torch.optim.Adam(
             self.model.parameters(), lr=learning_rate)
 
@@ -70,8 +72,12 @@ class LSTM():
                 outputs = self.model.forward(sequence)  # forward pass
                 self.optimizer.zero_grad()  # caluclate the gradient, manually setting to 0
 
+                # print(outputs)
+
+                # outputs = (outputs > 0.5)
+
                 # obtain the loss function
-                loss = self.criterion(outputs, label)
+                loss = self.criterion(outputs[0], label)
 
                 loss.backward()  # calculates the loss of the loss function
 

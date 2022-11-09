@@ -50,7 +50,7 @@ train['opcode'] = train['opcode'].apply(lambda x: json.loads(x))
 test = pd.read_csv(f'./split_ds/opcode_{TEST_SAMPLING_TECHNIQUE}_TEST.csv')
 test['opcode'] = test['opcode'].apply(lambda x: json.loads(x))
 
-train = train.iloc[:10]
+train = train.iloc[:100]
 print(train, test)
 
 
